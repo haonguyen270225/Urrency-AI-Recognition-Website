@@ -84,36 +84,43 @@ Currency-AI-Recognition-Website/
 │
 ├── frontend/
 │   ├── public/
-│   └── src/
-│       ├── assets/
-│       ├── components/
-│       ├── pages/
-│       ├── services/
-│       ├── styles/
-│       └── App.jsx
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── hooks/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
 │
 ├── backend/
-│   ├── controllers/
-│   ├── services/
-│   ├── models/
-│   ├── routes/
-│   └── Program.cs
-│
-├── model/
-│   ├── training/
-│   ├── prediction/
-│   └── weights/
-│
-├── dataset/
-│   ├── VND/
-│   ├── USD/
-│   └── CNY/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── routes/
+│   │   ├── core/
+│   │   ├── models/
+│   │   │   ├── custom_cnn/
+│   │   │   ├── mobilenet_v2/
+│   │   │   ├── resnet/
+│   │   │   ├── random_forest/
+│   │   │   └── yolo/
+│   │   ├── services/
+│   │   │   ├── prediction_service.py
+│   │   │   ├── image_service.py
+│   │   │   └── model_loader.py
+│   │   ├── schemas/
+│   │   └── main.py
+│   │
+│   ├── tests/
+│   ├── requirements.txt
+│   └── .env.example
 │
 ├── docs/
-│   └── project-documentation/
 │
-├── README.md
-└── .gitignore
+├── .gitignore
+└── README.md
 ```
 
 ---
