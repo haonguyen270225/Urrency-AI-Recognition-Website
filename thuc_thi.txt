@@ -1,0 +1,12 @@
+1. Chạy backend ở chửa sở PowerShell :
+cd D:\Urrency-AI-Recognition-Website\backend
+.\.venv312\Scripts\Activate.ps1
+uvicorn app.main:app --reload
+
+2. Chạy frontend ở cửa sổ frontend
+cd D:\Urrency-AI-Recognition-Website\frontend
+npm run dev
+
+
+3. Kiểm tra phiên bản bootstrap :
+npm list bootstrap
