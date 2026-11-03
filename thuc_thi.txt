@@ -1,12 +1,337 @@
-1. Chạy backend ở chửa sở PowerShell :
+HƯỚNG DẪN KHỞI ĐỘNG LẠI DỰ ÁN
+ỨNG DỤNG NHẬN DIỆN TIỀN TỆ
+================================
+
+1. THÔNG TIN DỰ ÁN
+------------------
+Thư mục dự án:
+D:\\Urrency-AI-Recognition-Website
+
+Cấu trúc chính:
+D:\\Urrency-AI-Recognition-Website
+|-- backend
+|   |-- .venv312
+|   |-- app
+|   |-- requirements.txt
+|   `-- ...
+`-- frontend
+    |-- package.json
+    |-- .env
+    `-- ...
+
+Công nghệ:
+- Frontend: React + Vite + Bootstrap
+- Backend: Python + FastAPI + Uvicorn
+- Các mô hình nhận diện: Custom CNN, MobileNetV2, ResNet18, YOLO11,
+  Random Forest
+- Backend đã được kiểm tra chạy bằng CPU.
+
+Các địa chỉ local đã sử dụng:
+- Backend API: http://127.0.0.1:8000
+- API health: http://127.0.0.1:8000/api/health
+- Frontend Vite: http://localhost:5175
+- API dự đoán đơn: /api/predict
+- API dự đoán nhiều ảnh: /api/predict/batch
+
+LƯU Ý:
+Port 8000 và 5175 là cấu hình đã được xác nhận trước đó. Nếu bạn đã đổi
+port trong lần làm việc gần nhất, hãy sử dụng cùng một port cho lệnh Uvicorn
+và biến VITE_API_BASE_URL trong frontend/.env. Không chạy hai backend
+cùng lúc trên cùng một port.
+
+
+2. MỖI LẦN MỞ LẠI DỰ ÁN - TRÌNH TỰ KHỞI ĐỘNG
+-------------------------------------------
+
+BƯỚC 1: Mở PowerShell và di chuyển đến thư mục backend
+
+    cd D:\\Urrency-AI-Recognition-Website\\backend
+
+BƯỚC 2: Kích hoạt môi trường Python
+
+    .\\.venv312\\Scripts\\Activate.ps1
+
+Sau khi kích hoạt thành công, dấu nhắc lệnh sẽ có dạng:
+
+    (.venv312) PS D:\\Urrency-AI-Recognition-Website\\backend>
+
+Nếu PowerShell chặn script kích hoạt, chỉ áp dụng cho cửa sổ PowerShell
+hiện tại bằng lệnh:
+
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+Sau đó chạy lại:
+
+    .\\.venv312\\Scripts\\Activate.ps1
+
+BƯỚC 3: Khởi động Backend
+
+Chạy lần lượt các lệnh sau trong cửa sổ PowerShell backend:
+
+    $env:OPENBLAS_NUM_THREADS="1"
+    $env:OMP_NUM_THREADS="1"
+    $env:MKL_NUM_THREADS="1"
+    $env:NUMEXPR_NUM_THREADS="1"
+    $env:TF_NUM_INTRAOP_THREADS="1"
+    $env:TF_NUM_INTEROP_THREADS="1"
+
+    python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+Giữ cửa sổ này mở trong suốt quá trình sử dụng ứng dụng.
+Khi backend khởi động thành công, Uvicorn sẽ hiển thị thông báo đang lắng nghe
+trên địa chỉ 127.0.0.1 và port 8000.
+
+KHÔNG đóng cửa sổ backend khi frontend đang sử dụng API.
+
+
+3. KIỂM TRA BACKEND
+-------------------
+Mở trình duyệt và truy cập:
+
+    http://127.0.0.1:8000/api/health
+
+Nếu API trả về trạng thái online/success thì backend đang hoạt động.
+
+Nếu dự án có bật Swagger UI, có thể kiểm tra thêm tại:
+
+    http://127.0.0.1:8000/docs
+
+Nếu không truy cập được, hãy xem lại cửa sổ PowerShell backend để tìm lỗi.
+
+
+4. KHỞI ĐỘNG FRONTEND
+---------------------
+Mở MỘT cửa sổ PowerShell mới (không tắt cửa sổ backend).
+
+Chạy:
+
+    cd D:\\Urrency-AI-Recognition-Website\\frontend
+
+Kiểm tra file .env:
+
+    Get-Content .env
+
+Biến API cần trỏ đến backend đang chạy. Cấu hình mặc định đã
+được xác nhận trước đó:
+
+    VITE_API_BASE_URL=http://127.0.0.1:8000
+
+Nếu backend đang sử dụng port khác, hãy sửa port trong dòng trên cho trùng khớp.
+Ví dụ, nếu backend chạy port 8001 thì sử dụng:
+
+    VITE_API_BASE_URL=http://127.0.0.1:8001
+
+Lưu file .env trước khi khởi động frontend.
+
+Nếu đây là lần đầu chạy trên máy hoặc thư mục node_modules chưa tồn tại,
+hãy cài đặt package:
+
+    npm install
+
+Sau đó khởi động Vite:
+
+    npm run dev -- --host localhost --port 5175
+
+Mở trình duyệt:
+
+    http://localhost:5175
+
+Giữ cả hai cửa sổ PowerShell (backend và frontend) luôn mở.
+
+
+5. MỖI LẦN SỬ DỤNG SAU ĐÓ
+-------------------------
+Mỗi lần tắt máy hoặc đóng terminal, để chạy lại:
+
+A. Mở PowerShell thứ nhất:
+    cd D:\\Urrency-AI-Recognition-Website\\backend
+    .\\.venv312\\Scripts\\Activate.ps1
+
+    $env:OPENBLAS_NUM_THREADS="1"
+    $env:OMP_NUM_THREADS="1"
+    $env:MKL_NUM_THREADS="1"
+    $env:NUMEXPR_NUM_THREADS="1"
+    $env:TF_NUM_INTRAOP_THREADS="1"
+    $env:TF_NUM_INTEROP_THREADS="1"
+
+    python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+B. Mở PowerShell thứ hai:
+    cd D:\\Urrency-AI-Recognition-Website\\frontend
+    npm run dev -- --host localhost --port 5175
+
+C. Mở trình duyệt:
+    http://localhost:5175
+
+
+6. DỪNG ỨNG DỤNG
+----------------
+Trong từng cửa sổ PowerShell đang chạy backend/frontend, nhấn:
+
+    Ctrl + C
+
+Nên dừng frontend và backend bằng Ctrl + C trước khi đóng terminal.
+
+
+7. XỬ LÝ LỖI THƯỜNG GẶP
+-----------------------
+
+LỖI A: Address already in use / WinError 10048
+Nguyên nhân: Port backend đã có một tiến trình khác sử dụng, thường là
+một Uvicorn cũ vẫn đang chạy.
+
+Kiểm tra port 8000:
+
+    Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue
+
+Xem PID của tiến trình đang lắng nghe:
+
+    Get-NetTCPConnection -LocalPort 8000 -State Listen |
+        Select-Object LocalAddress, LocalPort, OwningProcess
+
+Kiểm tra tiến trình trước khi dừng:
+
+    Get-Process -Id <PID>
+
+Nếu xác định đó là tiến trình Uvicorn cũ của dự án này và muốn dừng nó:
+
+    Stop-Process -Id <PID> -Force
+
+Thay <PID> bằng số PID thực tế. Không dừng PID nếu chưa xác định đúng
+tiến trình. Sau đó khởi động lại backend.
+
+Nếu bạn đang chuyển sang port 8001, hãy kiểm tra port 8001 và đồng bộ
+port trong lệnh Uvicorn cũng như frontend/.env.
+
+LỖI B: Frontend mở được nhưng không gọi được API
+- Kiểm tra backend vẫn đang chạy.
+- Truy cập http://127.0.0.1:8000/api/health.
+- Kiểm tra frontend/.env có VITE_API_BASE_URL trỏ đúng port backend không.
+- Sau khi sửa .env, tắt Vite bằng Ctrl + C và chạy lại npm run dev.
+- Kiểm tra thông báo lỗi trong cả hai terminal và Console/Network của
+  trình duyệt.
+
+LỖI C: Không kích hoạt được virtual environment
+Đảm bảo đang ở thư mục backend:
+
+    cd D:\\Urrency-AI-Recognition-Website\\backend
+
+Kiểm tra file kích hoạt:
+
+    Test-Path .\\.venv312\\Scripts\\Activate.ps1
+
+Nếu kết quả là True, thử:
+
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+    .\\.venv312\\Scripts\\Activate.ps1
+
+LỖI D: Frontend báo thiếu package / không tìm thấy Vite
+Di chuyển đến frontend và cài đặt lại dependencies:
+
+    cd D:\\Urrency-AI-Recognition-Website\\frontend
+    npm install
+
+Sau đó:
+
+    npm run dev -- --host localhost --port 5175
+
+LỖI E: Không chắc backend đang sử dụng port nào
+Kiểm tra cả hai port thường dùng:
+
+    Get-NetTCPConnection -LocalPort 8000,8001 -State Listen -ErrorAction SilentlyContinue
+
+Nếu không có kết quả, backend chưa lắng nghe trên hai port này.
+Nếu có kết quả, xem OwningProcess để xác định tiến trình.
+
+
+8. CÁC FILE / DỮ LIỆU QUAN TRỌNG
+--------------------------------
+- Backend entry point: backend\\app\\main.py
+- Python dependencies: backend\\requirements.txt
+- Python environment: backend\\.venv312
+- Frontend package config: frontend\\package.json
+- Frontend API config: frontend\\.env
+
+Một số mô hình đã được xác nhận trong dự án:
+- ResNet18:
+  backend\\app\\models\\ket_qua_resnet\\best_model.pth
+- YOLO11:
+  backend\\app\\models\\ket_qua_yolo\\currency_yolo11n_cls\\weights\\best.pt
+- Random Forest:
+  backend\\app\\models\\ket_qua_random_forset\\rf_currency_classifier.pkl
+- MobileNetV2:
+  backend\\app\\models\\ket_qua_mobilenetv2
+- Custom CNN:
+  nằm trong thư mục model tương ứng bên dưới backend\\app\\models
+
+Không xóa các thư mục mô hình, file trong backend\\app\\models,
+backend\\.venv312, frontend\\package-lock.json hoặc các file cấu hình
+nếu không biết rõ mục đích của chúng.
+
+
+9. CHECKLIST KHI CHẠY LẠI
+-------------------------
+[ ] Đã mở đúng thư mục dự án.
+[ ] Đã kích hoạt backend\\.venv312.
+[ ] Backend Uvicorn đã chạy và không báo lỗi.
+[ ] API health trả về trạng thái online.
+[ ] frontend/.env trỏ đúng địa chỉ backend.
+[ ] Đã chạy frontend bằng npm run dev.
+[ ] Đã mở http://localhost:5175 và thử tải ảnh lên để nhận diện.
+
+
+10. TÓM TẮT LỆNH NHANH
+----------------------
+BACKEND - PowerShell 1:
+
+    cd D:\\Urrency-AI-Recognition-Website\\backend
+    .\\.venv312\\Scripts\\Activate.ps1
+    $env:OPENBLAS_NUM_THREADS="1"
+    $env:OMP_NUM_THREADS="1"
+    $env:MKL_NUM_THREADS="1"
+    $env:NUMEXPR_NUM_THREADS="1"
+    $env:TF_NUM_INTRAOP_THREADS="1"
+    $env:TF_NUM_INTEROP_THREADS="1"
+    python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+FRONTEND - PowerShell 2:
+
+    cd D:\\Urrency-AI-Recognition-Website\\frontend
+    npm run dev -- --host localhost --port 5175
+
+TRUY CẬP:
+
+    http://localhost:5175
+
+KIỂM TRA BACKEND:
+
+    http://127.0.0.1:8000/api/health
+
+
+
+
+
+
+
+
+
+
+
+
+Stop-Process -Id 11824,18256,15872,31724,3924,17036,26040 -Force , netstat -ano | findstr :8000 
+Và câu lệnh này : 
 cd D:\Urrency-AI-Recognition-Website\backend
+
 .\.venv312\Scripts\Activate.ps1
-uvicorn app.main:app --reload
 
-2. Chạy frontend ở cửa sổ frontend
-cd D:\Urrency-AI-Recognition-Website\frontend
-npm run dev
+$env:OPENBLAS_NUM_THREADS="1"
+$env:OMP_NUM_THREADS="1"
+$env:MKL_NUM_THREADS="1"
+$env:NUMEXPR_NUM_THREADS="1"
+$env:TF_NUM_INTRAOP_THREADS="1"
+$env:TF_NUM_INTEROP_THREADS="1"
 
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 
 
-3. Kiểm tra phiên bản bootstrap :
-npm list bootstrap
+================================
+Hết hướng dẫn.
