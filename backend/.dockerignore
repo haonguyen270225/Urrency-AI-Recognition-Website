@@ -1,0 +1,25 @@
+﻿.git
+.gitignore
+
+.env
+.env.*
+
+.venv
+.venv*
+**/.venv
+**/.venv*
+
+__pycache__
+**/__pycache__
+.pytest_cache
+**/.pytest_cache
+*.py[cod]
+*.log
+
+tests/
+
+# Model backups - original files remain untouched
+app/models/ket_qua_custom_cnn/custom_cnn_final.keras
+app/models/ket_qua_mobilenetv2/mobilenetv2_best.keras
+app/models/ket_qua_resnet/last_model.pth
+app/models/ket_qua_yolo/currency_yolo11n_cls/weights/last.pt
